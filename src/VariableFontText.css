@@ -1,0 +1,16 @@
+/* Variable-font heading. The effect requires a font exposing wght + wdth axes;
+   Roboto Flex is loaded in index.html. Resting state = bold + wide. */
+.vft {
+  font-family: 'Roboto Flex', system-ui, sans-serif;
+  font-variation-settings: 'wght' 820, 'wdth' 151;
+}
+ 
+.vft-letter {
+  display: inline-block;
+  white-space: pre;  
+  will-change: font-variation-settings;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vft-letter { transition: none !important; }
+}

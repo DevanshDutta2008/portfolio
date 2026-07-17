@@ -1,0 +1,87 @@
+
+.intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #040404;
+  animation: intro-lift 1100ms cubic-bezier(0.76, 0, 0.24, 1) 3700ms forwards;
+}
+
+@keyframes intro-lift {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.intro-sig {
+  display: flex;
+}
+
+.intro-sig svg {
+  width: clamp(170px, 24vw, 320px);
+  height: auto;
+  overflow: visible;
+}
+
+.intro-sig svg path {
+  stroke: #c084fc !important;
+  fill: none !important;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sig-draw 480ms cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+@keyframes sig-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.intro-sig svg path:nth-child(1)  { animation-delay: 0ms;    }
+.intro-sig svg path:nth-child(2)  { animation-delay: 290ms;  }
+.intro-sig svg path:nth-child(3)  { animation-delay: 580ms;  }
+.intro-sig svg path:nth-child(4)  { animation-delay: 870ms;  }
+.intro-sig svg path:nth-child(5)  { animation-delay: 1160ms; }
+.intro-sig svg path:nth-child(6)  { animation-delay: 1450ms; }
+.intro-sig svg path:nth-child(7)  { animation-delay: 1740ms; }
+.intro-sig svg path:nth-child(8)  { animation-delay: 2030ms; }
+.intro-sig svg path:nth-child(9)  { animation-delay: 2320ms; }
+.intro-sig svg path:nth-child(10) { animation-delay: 2610ms; }
+.intro-sig svg path:nth-child(11) { animation-delay: 2900ms; }
+.intro-sig svg path:nth-child(12) { animation-delay: 3190ms; }
+
+.site-main {
+  /* `backwards` (not `both`): holds the hidden translateY(100vh) state during
+     the 3700ms delay, animates the page up, then DROPS the transform once the
+     intro finishes. A lingering transform here (even the identity translateY(0)
+     that `both`/`forwards` would retain) makes .site-main a containing block,
+     which silently breaks `position: sticky` on the footer panel inside it. */
+  animation: page-rise 1100ms cubic-bezier(0.76, 0, 0.24, 1) 3700ms backwards;
+}
+
+@keyframes page-rise {
+  from {
+    transform: translateY(100vh);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-loader,
+  .intro-sig svg path,
+  .site-main {
+    animation: none !important;
+  }
+  .site-main {
+    transform: none;
+    opacity: 1;
+  }
+}

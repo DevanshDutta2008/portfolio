@@ -1,0 +1,437 @@
+:root {
+  --hero-fg: #efe9d8;
+  --hero-fg-soft: rgba(239, 233, 216, 0.72);
+}
+
+/* ---------- top nav ---------- */
+.site-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 36px;
+  z-index: 50;
+  color: var(--hero-fg);
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+.site-nav > * { pointer-events: auto; }
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  font: inherit;
+  padding: 4px 0;
+}
+.nav-menu svg { display: block; }
+
+.nav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 22px;
+  letter-spacing: 0;
+  color: var(--hero-fg);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo-from   { font-style: normal; }
+.logo-another { font-style: italic; }
+
+.nav-chat .nav-arrow { display: inline-block; transform: translateY(-1px); }
+
+.nav-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6vw;
+  color: var(--hero-fg);
+  text-align: center;
+}
+
+.hero-headline {
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(48px, 8.5vw, 110px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-transform: uppercase;
+  color: var(--hero-fg);
+
+  /* upward parallax + fade driven by scroll — no blur, so the "I" stays crisp
+     as the curve extends from it (--hero-blur: 0 = in place, 1 = lifted, faded) */
+  --hero-lift-max: 55vh;
+  transform: translateY(calc(var(--hero-blur, 0) * var(--hero-lift-max) * -1));
+  opacity: calc(1 - var(--hero-blur, 0) * 0.95);
+  transition: transform 0.12s linear, opacity 0.12s linear;
+  will-change: transform, opacity;
+}
+.hero-since {
+  filter: blur(calc(var(--hero-blur, 0) * 6px));
+  transform: translateY(calc(var(--hero-blur, 0) * -40vh));
+  opacity: calc(1 - var(--hero-blur, 0));
+  transition: filter 0.12s linear, transform 0.12s linear, opacity 0.12s linear;
+}
+.hero-scroll-cue {
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.7, 0, 0.25, 1);
+}
+/* hidden once you leave the first page */
+.hero-scroll-cue.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* rotating word at end of headline */
+.hero-rotating-word {
+  display: inline-block;
+  animation: heroWordIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
+@keyframes heroWordIn {
+  0%   { opacity: 0; transform: translateY(0.12em); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0);      filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-rotating-word { animation: none; }
+}
+
+/* inline video sits within a headline line */
+.hero-vid-btn {
+  display: inline-block;
+  vertical-align: middle;
+  height: 0.78em;
+  width: calc(0.78em * 16 / 9);
+  padding: 0;
+  border: 0;
+  background: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 0 0.05em;
+  position: relative;
+  transition: transform 0.25s ease;
+}
+.hero-vid-btn:hover { transform: scale(1.04); }
+.hero-vid-btn video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---------- side labels & cue ---------- */
+.hero-since {
+  position: absolute;
+  left: 6vw;
+  top: 58%;
+  transform: translateY(-50%);
+  margin: 0;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--hero-fg);
+}
+
+.hero-lang {
+  display: inline-flex;
+  gap: 10px;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--hero-fg);
+}
+.hero-lang-sep { opacity: 0.55; }
+
+.hero-scroll-cue {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--hero-fg-soft);
+  z-index: 60;
+  background: none;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+
+  --cue-return: calc(max(0, min(1, (var(--page-progress, 0) - 0.85) * 8)) * 140px);
+  --cue-y:      calc(0px - var(--cue-return));
+
+  transform: translate(-50%, var(--cue-y)) rotate(0deg);
+  transition: transform 0.55s cubic-bezier(0.7, 0, 0.25, 1), opacity 0.35s ease;
+}
+.hero-scroll-cue.is-at-bottom {
+  transform: translate(-50%, var(--cue-y)) rotate(180deg);
+}
+.cue-dot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  animation: cueDotPulse 1.8s ease-in-out infinite;
+}
+.cue-line {
+  position: relative;
+  width: 1px;
+  height: 48px;
+  background: rgba(239, 233, 216, 0.18);
+  overflow: hidden;
+}
+.cue-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 45%;
+  background: currentColor;
+  transform: translateY(-100%);
+  animation: cueDrop 1.8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+@keyframes cueDrop {
+  0%   { transform: translateY(-100%); }
+  60%  { transform: translateY(220%); }
+  100% { transform: translateY(220%); }
+}
+@keyframes cueDotPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.7; }
+  50%      { transform: scale(1.35); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cue-line::before,
+  .cue-dot { animation: none; }
+}
+
+/* ---------- expanded video modal ---------- */
+.hero-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  cursor: zoom-out;
+  animation: heroModalIn 0.25s ease;
+}
+@keyframes heroModalIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.hero-modal video {
+  width: min(92vw, 1600px);
+  max-height: 88vh;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #000;
+  border-radius: 6px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+.hero-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--hero-fg);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.hero-modal-close:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* ---------- rising menu overlay ---------- */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: #e9e2d1;
+  color: #f97b0c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 7vh 7vw;
+  /* font-family: 'Archivo', system-ui, sans-serif; */
+  /* page rises up from the bottom; on close it drops back down */
+  transform: translateY(100%);
+  transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s linear 0.72s;
+  will-change: transform;
+  pointer-events: none;
+  visibility: hidden;
+}
+.menu-overlay.is-open {
+  transform: translateY(0);
+  pointer-events: auto;
+  visibility: visible;
+  transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s linear 0s;
+}
+
+.menu-close {
+  position: absolute;
+  top: 30px;
+  right: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  padding: 6px 2px;
+  cursor: pointer;
+  color: inherit;
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.menu-close-x { font-size: 22px; line-height: 1; }
+
+.menu-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* entrance (rise + stagger) lives on the <li> so it never interferes
+   with the link's hover transition */
+.menu-nav li {
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.75s ease;
+  transition-delay: calc(0.06s * var(--menu-i, 0));
+}
+.menu-overlay.is-open .menu-nav li {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: calc(0.16s + 0.07s * var(--menu-i, 0));
+}
+
+.menu-link {
+  display: inline-block;
+  font-family: 'Archivo', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(56px, 12vw, 150px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  color: #e0531f;
+  text-decoration: none;
+
+  /* hover: constant, delay-free transition — matches the Roles list */
+  opacity: 0.85;
+  transition: filter 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* hover one item → blur the rest (links + contact), like Roles */
+.menu-nav:hover .menu-link,
+.menu-nav:focus-within .menu-link {
+  opacity: 0.35;
+  filter: blur(4px);
+}
+.menu-nav .menu-link:hover,
+.menu-nav .menu-link:focus-visible {
+  opacity: 1;
+  filter: blur(0) drop-shadow(0 6px 30px rgba(0, 0, 0, 0.25));
+  transform: scale(1.04);
+}
+.menu-overlay:has(.menu-nav:hover) .menu-contact,
+.menu-overlay:has(.menu-nav:focus-within) .menu-contact {
+  opacity: 0.4;
+  filter: blur(3px);
+  transition-delay: 0s;
+}
+
+.menu-contact {
+  margin-top: clamp(40px, 7vh, 90px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  transform: translateY(40px);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.7s ease,
+    filter 0.4s ease;
+}
+.menu-overlay.is-open .menu-contact {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: calc(0.16s + 0.07s * var(--menu-i, 0));
+}
+.menu-contact-label {
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+.menu-contact-label:hover { opacity: 1; }
+.menu-contact-email {
+  color: black;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(24px, 4vw, 44px);
+  color: inherit;
+  text-decoration: none;
+  width: fit-content;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease;
+}
+.menu-contact-email:hover { border-color: currentColor; }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-overlay,
+  .menu-link,
+  .menu-contact {
+    transition-duration: 0.001s;
+  }
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  .site-nav { padding: 20px 18px; }
+  .nav-logo { font-size: 18px; }
+  .hero-since { top: auto; bottom: 110px; transform: none; }
+  .hero-headline { font-size: clamp(40px, 11vw, 80px); }
+  .hero-lang { font-size: 11px; }
+  .menu-overlay { padding: 12vh 8vw; }
+  .menu-close { top: 20px; right: 18px; }
+}
