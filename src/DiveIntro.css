@@ -3,9 +3,8 @@
   height: 420vh;   /* was 240vh */
   z-index: 2;
   --dive-progress: 0;
-  ...
 
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
 
   --dive-cover: #0e1b40;
   
@@ -188,7 +187,7 @@
 }
 
 @media (max-width: 720px) {
-  .dive-section { height: 220vh; }
+  .dive-section { height: 380vh; }   /* was 220vh */
   .dive-journey-title { font-size: clamp(36px, 11vw, 72px); }
 }
 
