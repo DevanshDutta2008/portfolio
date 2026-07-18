@@ -1,12 +1,14 @@
 .dive-section {
   position: relative;
-  height: 240vh;
+  height: 420vh;   /* was 240vh */
   z-index: 2;
   --dive-progress: 0;
+  ...
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   --dive-cover: #0e1b40;
+  
 }
 
 .dive-sticky {
